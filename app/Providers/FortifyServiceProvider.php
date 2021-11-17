@@ -33,7 +33,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(Request $request)
     {
-        Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
@@ -69,7 +68,7 @@ class FortifyServiceProvider extends ServiceProvider
         if ($user == 'user') {
             Fortify::createUsersUsing(CreateNewUser::class);
         } else {
-            Fortify::createUsersUsing(CreateNewCompany::class);
+            Fortify::createUsersUsing(CreateNewFund::class);
         }
     }
 }

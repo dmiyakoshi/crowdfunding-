@@ -75,7 +75,7 @@ return [
 
         'funds' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Company::class,
+            'model' => App\Models\Fund::class,
         ],
     ],
 
