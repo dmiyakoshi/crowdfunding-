@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,12 @@ Route::get('/', function () {
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
 // })->name('dashboard');
+
+Route::resource('plans', PlanController::class)
+    ->only(['create', 'store', 'edit', 'update', 'destroy'])
+    ->middleware('auth:users');
+
+Route::resource('plans', PlanController::class)
+    ->only(['show', 'index']);
 
 require __DIR__ . '/auth.php';
