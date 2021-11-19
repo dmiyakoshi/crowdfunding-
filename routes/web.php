@@ -18,6 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+// Route::get('/', [PlanController::class, 'index'])
+//     ->name('root');
+
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
 // })->name('dashboard');

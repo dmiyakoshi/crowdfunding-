@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Method;
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlanController extends Controller
 {
@@ -15,7 +16,9 @@ class PlanController extends Controller
      */
     public function index()
     {
-        //
+        $plans = Plan::with('user')->latest()->paginate(6);
+
+        return view('plans.index', compact('plans'));
     }
 
     /**
@@ -27,7 +30,7 @@ class PlanController extends Controller
     {
         $methods = Method::all();
 
-        return view('plans.create', ['methods' => $methods]);
+        return view('plans.create', compact('methods'));
     }
 
     /**
@@ -38,7 +41,25 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $plan = new Plan($request->all());
+
+        $plan->user_id = $request->user()->id;
+
+        $plan->public = 0;
+        $plan->relese_flag = 0;
+
+        DB::beginTransaction();
+
+        try {
+            $plan->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            back()->withErrors('登録処理でエラーが発生しました');
+            DB::rollBack();
+        }
+
+        return view('plans.show', ['plan' => $plan]);
     }
 
     /**
@@ -49,7 +70,7 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
-        //
+        return view('plans.show', compact('plan'));
     }
 
     /**
@@ -60,7 +81,9 @@ class PlanController extends Controller
      */
     public function edit(Plan $plan)
     {
-        //
+        $methods = Method::all();
+
+        return view('plans.edit', compact('plan', 'methods'));
     }
 
     /**

@@ -30,9 +30,8 @@
                         <div class="absolute bg-gradient-to-b from-indigo-900 to-black opacity-75 inset-0 z-0"></div>
                         <div class="w-4/5 z-10">
                             <h2 class="text-xl xl:text-3xl italic mb-6">Crowdfunding</h2>
-                            <div class="text-5xl sm:text-6xl xl:text-8xl font-bold leading-tight mb-6"><br>
-                            </div>
                             <div class="sm:text-sm xl:text-md text-gray-200 font-normal">このサイトはクラウドファンディングの起案者と支援者をマッチングするサービスです。</div>
+                            <div class="text-xs sm:text-2xl xl:text-4xl font-normal leading-tight mt-6 mb-6"><a href="{{ route('plans.index') }}">プロジェクトを探す</a></div>
                         </div>
                         <div class="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full w-2/5 xl:w-2/5 p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none relative z-11">
                             <div class="max-w-md w-full space-y-8">
@@ -55,7 +54,7 @@
                                 </div>
                                 <div class="text-center text-white">
                                     <h3 class="mt-6 text-2xl font-bold mb-6">
-                                        企画者の方はこちら
+                                        起案者の方はこちら
                                     </h3>
                                     <div>
                                         <a href="{{ route('user.login') }}" class="w-full flex justify-center bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-4 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500">Sign in</a>

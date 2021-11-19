@@ -20,7 +20,7 @@ class CreatePhotosTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            // $table->foreignId('gift_id')
+            // $table->foreignId('gift_id') 後で追加
             //     ->nullable()
             //     ->constrained()
             //     ->cascadeOnUpdate()

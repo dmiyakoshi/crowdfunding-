@@ -20,8 +20,11 @@ class CreatePlansTable extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('title');
+            $table->string('heading_introduction'); //見出しを記述
             $table->text('introduction'); //自己紹介と企画の紹介
+            $table->string('heading_do');
             $table->text('description_do'); //何を実現したいか
+            $table->string('heading_reason');
             $table->text('description_reason'); //なぜやろうと思ったか
             $table->text('how_use_money'); //お金の使いみち
             $table->date('relese_date'); //公開日

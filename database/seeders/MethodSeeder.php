@@ -14,7 +14,7 @@ class MethodSeeder extends Seeder
      */
     public function run()
     {
-        Method::created(['name' => 'All in']);
-        Method::created(['name' => 'All or Nothing']);
+        Method::create(['name' => 'All in']);
+        Method::create(['name' => 'All or Nothing']);
     }
 }

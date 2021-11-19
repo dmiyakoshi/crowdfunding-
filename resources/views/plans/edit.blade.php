@@ -4,8 +4,9 @@
         <x-validation-errors :errors="$errors" />
     </div>
 
-    <form action="{{ route('plans.store') }}" method="POST" class="rounded pt-3 pb-8 mb-4">
+    <form action="{{ route('plans.update') }}" method="POST" class="rounded pt-3 pb-8 mb-4">
         @csrf
+        @method('PATCH')
         <div class="container lg:w-1/2 md:w-4/5 w-11/12 mx-auto mt-8 px-8 bg-blue-400 shadow-md rounded-md">
             <div class="mb-4">
                 <label class="block text-white mb-2" for="title">
@@ -13,7 +14,7 @@
                 </label>
                 <input type="text" name="title"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="20字以上40字以下" value="{{ old('title') }}">
+                    required placeholder="20字以上40字以下" value="{{ old('title', $plan->title) }}">
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="introduction">
@@ -21,7 +22,7 @@
                 </label>
                 <textarea name="introduction" rows="10"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="250文字以上??文字以下">{{ old('introduction') }}</textarea>
+                    required placeholder="250文字以上??文字以下">{{ old('introduction', $plan->introduction) }}</textarea>
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="file">画像</label>
@@ -38,11 +39,11 @@
                 </label>
                 <input type="text" name="heading_introduction"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="??字以上？？字以下" value="{{ old('heading_do') }}">
+                    required placeholder="??字以上？？字以下" value="{{ old('heading_do', $plan->heading_do) }}">
             </div>
             <textarea name="description_do" rows="10"
                 class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                required placeholder="詳細">{{ old('description_do') }}</textarea>
+                required placeholder="詳細">{{ old('description_do', $plan->description_do) }}</textarea>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="image">画像</label>
                 <input type="file" name="image" id="image" class="">
@@ -58,11 +59,11 @@
                 </label>
                 <input type="text" name="heading_reason"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="??字以上？？字以下" value="{{ old('heading_reason') }}">
+                    required placeholder="??字以上？？字以下" value="{{ old('heading_reason', $plan->heading_reason) }}">
             </div>
             <textarea name="description_do" rows="10"
                 class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                required placeholder="詳細">{{ old('description_reason') }}</textarea>
+                required placeholder="詳細">{{ old('description_reason', $plan->description_reason) }}</textarea>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="image">画像</label>
                 <input type="file" name="image" id="image" class="">
@@ -75,7 +76,7 @@
                 </label>
                 <textarea name="how_use_money" rows="10"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="何にいくら必要か示してください">{{ old('how_use_money') }}</textarea>
+                    required placeholder="何にいくら必要か示してください">{{ old('how_use_money', $plan->how_use_money) }}</textarea>
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="image">画像</label>
@@ -91,7 +92,7 @@
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3">
                     <option disabled selected value="">選択してください</option>
                     @foreach ($methods as $method)
-                        <option value="{{ $method->id }}" @if ($method->id == old('method_id')) selected @endif>{{ $method->name }}
+                        <option value="{{ $method->id }}" @if ($method->id == old($plan->method->id)) selected @endif>{{ $method->name }}
                         </option>
                     @endforeach
                 </select>
@@ -102,7 +103,7 @@
                 </label>
                 <input type="date" name="relese"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="公開日" value="{{ old('relese') }}">
+                    required placeholder="公開日" value="{{ old('relese', $plan->relese) }}">
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="due_date">
@@ -110,11 +111,11 @@
                 </label>
                 <input type="date" name="due_date"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="募集期限" value="{{ old('due_date') }}">
+                    required placeholder="募集期限" value="{{ old('due_date', $plan->due_date) }}">
             </div>
             <div class="container lg:w-1/2 md:w-4/5 w-11/12 mx-auto mt-8 px-8">
                 <input type="submit" value="登録"
-                    class="w-full flex justify-center bg-gradient-to-r from-purple-500 to-blue-600 hover:bg-gradient-to-l hover:from-purple-700 hover:to-blue-800 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500">
+                    class="w-full flex justify-center bg-gradient-to-r from-pink-500 to-blue-500 hover:bg-gradient-to-l hover:from-purple-500 hover:to-blue-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500">
             </div>
         </div>
     </form>

@@ -10,11 +10,24 @@ class Plan extends Model
 {
     use HasFactory;
 
-    public function getImagePathAttribute()
+    protected $fillable = [
+        'title',
+        'heading_introduction',
+        'introduction',
+        'heading_do',
+        'description_do',
+        'heading_reason',
+        'description_reason',
+        'how_use_money',
+        'relese_date',
+        'due_date',
+    ];
+
+    public function getImagePathsAttribute()
     {
         return 'plans/' . $this->photos->name;
     }
-    public function getImageUrlAttribute()
+    public function getImageUrlsAttribute()
     {
         return Storage::url($this->image_path);
     }
@@ -34,7 +47,7 @@ class Plan extends Model
         return $this->hasOne(Method::class);
     }
 
-    public function gift()
+    public function gifts()
     {
         return $this->hasMany(Gift::class);
     }
