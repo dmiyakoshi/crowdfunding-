@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\GiftController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\SupportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +33,13 @@ Route::resource('plans', PlanController::class)
 
 Route::resource('plans', PlanController::class)
     ->only(['show', 'index']);
+
+Route::resource('plans.gifts', GiftController::class)
+    ->middleware(['auth:users'])
+    ->only(['create', 'store', 'edit', 'update', 'destroy']);
+
+Route::resource('plans.supports', SupportController::class)
+    ->only(['create', 'destroy'])
+    ->middleware(['auth:funds']);
 
 require __DIR__ . '/auth.php';

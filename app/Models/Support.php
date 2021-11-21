@@ -5,20 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Photo extends Model
+class Support extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-            'plan_id',
-            'name',
-            'path',
+        'plan_id',
+        'fund_id',
+        'money',
     ];
-
-    public function plan()
-    {
-        return $this->belongsTo(Plan::class);
-    }
 
     public function gift()
     {

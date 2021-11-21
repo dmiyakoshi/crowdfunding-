@@ -1,0 +1,10 @@
+### index
+GET /api/plans HTTP/1.1
+Host: localhost
+Accept: application/json
+
+### show
+GET /api/plans/1 HTTP/1.1
+Host: localhost
+Accept: application/json
+content-type: application/json

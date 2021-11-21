@@ -28,4 +28,9 @@ class Gift extends Model
     {
         return $this->hasMany(Photo::class);
     }
+
+    public function supports()
+    {
+        return $this->hasMany(Support::class);
+    }
 }

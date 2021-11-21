@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Consts\UserConst;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class Plan extends Model
 {
@@ -12,6 +15,7 @@ class Plan extends Model
 
     protected $fillable = [
         'title',
+        'goal',
         'heading_introduction',
         'introduction',
         'heading_do',
@@ -19,17 +23,49 @@ class Plan extends Model
         'heading_reason',
         'description_reason',
         'how_use_money',
+        'method_id',
         'relese_date',
         'due_date',
     ];
 
+
+    public function scopeMyPlan(Builder $query)
+    {
+        $query->where(
+            'user_id',
+            Auth::guard(UserConst::GUARD)->user()->id
+        );
+
+        return $query;
+    }
+
     public function getImagePathsAttribute()
     {
-        return 'plans/' . $this->photos->name;
+        $photos = $this->photos;
+        $paths = [];
+
+        for ($i = 0; $i < count($photos); $i++) {
+            $paths[$i] = 'plans/' . $photos[$i]->path;
+        }
+
+        return $paths;
     }
     public function getImageUrlsAttribute()
     {
-        return Storage::url($this->image_path);
+        $imagePaths = $this->image_paths;
+        $imageUrls = [];
+
+        if (config('filesystems.default') == 'gcs') {
+            for ($i = 0; $i < count($imagePaths); $i++) {
+                $imageUrls[$i] = Storage::temporaryUrl($imagePaths[$i], now()->addMinutes(5));
+            }
+        } else {
+            for ($i = 0; $i < count($imagePaths); $i++) {
+                $imageUrls[$i] = Storage::url($imagePaths[$i]);
+            }
+        }
+
+        return $imageUrls;
     }
 
     public function user()
@@ -44,7 +80,7 @@ class Plan extends Model
 
     public function method()
     {
-        return $this->hasOne(Method::class);
+        return $this->belongsTo(Method::class);
     }
 
     public function gifts()

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FundController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Features;
@@ -16,11 +18,7 @@ use Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController;
 foreach (config('fortify.users') as $user) {
     Route::prefix($user)
         ->name($user . '.')
-        ->group(function () use ($user) {
-            Route::name('dashboard')->middleware(['auth:' . Str::plural($user), 'verified'])
-                ->get('/dashboard', function () use ($user) {
-                    return view('auth.' . $user . '.dashboard');
-                });
+        ->group(function () {
 
             $enableViews = config('fortify.views', true);
 
@@ -130,3 +128,11 @@ foreach (config('fortify.users') as $user) {
                 ->name('profile.show');
         });
 }
+
+Route::get('fund/dashboard', [FundController::class, 'dashboard'])
+    ->middleware(['auth:funds'])
+    ->name('fund.dashboard');
+
+Route::get('user/dashboard', [UserController::class, 'dashboard'])
+    ->middleware(['auth:users'])
+    ->name('user.dashboard');
