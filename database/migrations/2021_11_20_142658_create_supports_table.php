@@ -15,19 +15,21 @@ class CreateSupportsTable extends Migration
     {
         Schema::create('supports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gift_id')
+            $table->foreignId('plan_id')
                 ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('fund_id')
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('title');
-            $table->text('context');
+            $table->foreignId('gift_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->integer('money');
             $table->timestamps();
-            $table->unique(['gift_id', 'fund_id']);
         });
     }
 

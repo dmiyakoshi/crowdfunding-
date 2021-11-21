@@ -10,13 +10,46 @@ class Gift extends Model
 {
     use HasFactory;
 
-    public function getImagePathsAttribute()
+    protected $fillable = [
+        'name',
+        'price',
+        'description',
+    ];
+
+    public function getImagePathAttribute()
     {
-        return 'gifts/' . $this->photos->name;
+        // $photos = $this->photos; //画像を複数にするならこちらにする
+        // $paths = [];
+
+        // for ($i = 0; $i < count($photos); $i++) {
+        //     $paths[$i] = 'gifts/' . $photos[$i]->path;
+        // }
+
+        // return $paths;
+
+        return '/gifts/' . $this->photo->path;
     }
-    public function getImageUrlsAttribute()
+    public function getImageUrlAttribute()
     {
-        return Storage::url($this->image_paths);
+        // $imagePaths = $this->image_paths; //複数に変更する場合ならこちらをつかう
+        // $imageUrls = [];
+
+        // if (config('filesystems.default') == 'gcs') {
+        //     for ($i = 0; $i < count($imagePaths); $i++) {
+        //         $imageUrls[$i] = Storage::temporaryUrl($imagePaths[$i], now()->addMinutes(5));
+        //     }
+        // } else {
+        //     for ($i = 0; $i < count($imagePaths); $i++) {
+        //         $imageUrls[$i] = Storage::url($imagePaths[$i]);
+        //     }
+        // }
+
+        // return $imageUrls;
+
+        if (config('filesystems.default') == 'gcs') {
+            return Storage::temporaryUrl($this->image_path, now()->addMinutes(5));
+        }
+        return Storage::url($this->image_path);
     }
 
     public function plan()
@@ -24,13 +57,18 @@ class Gift extends Model
         return $this->belongsTo(Plan::class);
     }
 
-    public function photos()
+    public function photo()
     {
-        return $this->hasMany(Photo::class);
+        return $this->hasOne(Photo::class);
     }
 
     public function supports()
     {
         return $this->hasMany(Support::class);
+    }
+
+    public function support()
+    {
+        return $this->belongsTo(Support::class);
     }
 }

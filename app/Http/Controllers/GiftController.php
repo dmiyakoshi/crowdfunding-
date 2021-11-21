@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gift;
+use App\Models\Photo;
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class GiftController extends Controller
 {
@@ -36,12 +39,58 @@ class GiftController extends Controller
      */
     public function store(Request $request, Plan $plan)
     {
-        $gift = new Gift();
+        $gift = new Gift($request->all());
         $gift->plan_id = $plan->id;
+
+        $file = $request->file('file');
+// dd($request->file('file'), $request, $files);
+
+        DB::beginTransaction();
 
         try {
             $gift->save();
-        } catch (\Throwable $th) {
+
+            //             foreach ($files as $file) { //画像を複数に変更ならこちらにする
+            // dd($file);
+            //                 if (!$path = Storage::putFile('gifts' , $file)) {
+            //                     return back()->withErrors('画像の登録に失敗しました');
+            //                 }
+            // dd($path);
+            //                 $photo = new Photo([
+            //                     'gift_id' => $gift->id,
+            //                     'name' => $file->getClientOriginalName(),
+            //                     'path' => basename($path)
+            //                 ]);
+            // dd($photo);
+            //                 $photo->save();
+            //             }
+
+            if (!$path = Storage::putFile('gifts', $file)) {
+                return back()->withErrors('画像の登録に失敗しました');
+            }
+
+            $photo = new Photo([
+                'name' => $file->getClientOriginalName(),
+                'path' => basename($path),
+            ]);
+
+            $photo->gift_id = $gift->id;
+
+            $photo->save();
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            if (isset($gift)) {
+                $paths = $gift->getImageUrls();
+                foreach ($paths as $path) {
+                    if (Storage::exists($path)) {
+                        Storage::delete($path);
+                    }
+                }
+            }
+
+            DB::rollBack();
             return back()->withErrors('登録処理に失敗しました');
         }
 

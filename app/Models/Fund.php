@@ -59,4 +59,9 @@ class Fund extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function supports()
+    {
+        return $this->hasMany(Support::class);
+    }
 }

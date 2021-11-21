@@ -17,7 +17,8 @@ class AddMethodIdToPlansTable extends Migration
             $table->foreignId('method_id')
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete(); //募集方法を選択 All in OR All or Nothig
+                ->cascadeOnDelete()
+                ->after('plan_id'); //募集方法を選択 All in OR All or Nothig
         });
     }
 

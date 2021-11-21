@@ -44,8 +44,7 @@
                                                 alt="{{ $plan->user->name }}" />
                                         @endif
                                     </div>
-                                    <div class="text-sm font-semibold">{{ $plan->user->name }}<span
-                                            class="font-normal ml-2">5 minutes</span></div>
+                                    <div class="text-sm font-semibold">{{ $plan->user->name }}</div>
                                 </div>
                                 <div>
                                     <a href="{{ route('plans.show', $plan) }}"

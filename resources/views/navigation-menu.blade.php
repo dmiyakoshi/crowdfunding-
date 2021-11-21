@@ -9,20 +9,25 @@
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
-                @auth
-                    <!-- Navigation Links -->
+                <div class="pl-3">
+                    <a href="{{ route('plans.index') }}">プロジェクトを探す</a>
+                </div>
+                <!-- Navigation Links -->
+                @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() || Auth::guard(\App\Consts\FundConst::GUARD)->check())
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-jet-nav-link href="{{ route($prefix . 'dashboard') }}"
                             :active="request()->routeIs($prefix . 'dashboard')">
                             {{ __('Dashboard') }}
                         </x-jet-nav-link>
                     </div>
-                </div>
+                @endif
+            </div>
 
-                <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="hidden sm:flex sm:items-center sm:ml-6">
 
-                    <!-- Settings Dropdown -->
-                    <div class="ml-3 relative">
+                <!-- Settings Dropdown -->
+                <div class="ml-3 relative">
+                    @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() || Auth::guard(\App\Consts\FundConst::GUARD)->check())
                         <x-jet-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -72,16 +77,18 @@
                                     @csrf
 
                                     <x-jet-dropdown-link href="{{ route($prefix . 'logout') }}" onclick="event.preventDefault();
-                                                        this.closest('form').submit();">
+                                                                            this.closest('form').submit();">
                                         {{ __('Log Out') }}
                                     </x-jet-dropdown-link>
                                 </form>
                             </x-slot>
                         </x-jet-dropdown>
-                    </div>
+                    @endif
                 </div>
+            </div>
 
-                <!-- Hamburger -->
+            <!-- Hamburger -->
+            @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() || Auth::guard(\App\Consts\FundConst::GUARD)->check())
                 <div class="-mr-2 flex items-center sm:hidden">
                     <button @click="open = ! open"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
@@ -94,10 +101,12 @@
                         </svg>
                     </button>
                 </div>
-            </div>
+            @endif
         </div>
+    </div>
 
-        <!-- Responsive Navigation Menu -->
+    <!-- Responsive Navigation Menu -->
+    @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() || Auth::guard(\App\Consts\FundConst::GUARD)->check())
         <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
             <div class="pt-2 pb-3 space-y-1">
                 <x-jet-responsive-nav-link href="{{ route($prefix . 'dashboard') }}"
@@ -140,12 +149,12 @@
                         @csrf
 
                         <x-jet-responsive-nav-link href="{{ route($prefix . 'logout') }}" onclick="event.preventDefault();
-                                            this.closest('form').submit();">
+                                                            this.closest('form').submit();">
                             {{ __('Log Out') }}
                         </x-jet-responsive-nav-link>
                     </form>
                 </div>
             </div>
         </div>
-    @endauth
+    @endif
 </nav>

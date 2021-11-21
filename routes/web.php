@@ -39,7 +39,7 @@ Route::resource('plans.gifts', GiftController::class)
     ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
 Route::resource('plans.supports', SupportController::class)
-    ->only(['create', 'destroy'])
+    ->only(['store', 'create', 'destroy'])
     ->middleware(['auth:funds']);
 
 require __DIR__ . '/auth.php';

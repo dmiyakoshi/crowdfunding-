@@ -16,8 +16,8 @@ class FundController extends Controller
      */
     public function dashboard()
     {
-        $jobOffers = Plan::whereHas('supports', function ($query) {
-            $query->where('user_id', Auth::guard(FundConst::GUARD)->user()->id);
+        $plans = Plan::wherehas('supports',function($query){
+            $query->where('plan_id', Auth::guard(FundConst::GUARD)->user()->id);
         })->get();
 
         return view('auth.fund.dashboard', compact('plans'));

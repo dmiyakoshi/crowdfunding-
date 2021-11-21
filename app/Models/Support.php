@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use function PHPUnit\Framework\returnSelf;
+
 class Support extends Model
 {
     use HasFactory;
@@ -17,6 +19,16 @@ class Support extends Model
 
     public function gift()
     {
-        return $this->belongsTo(Gift::class);
+        return $this->hasOne(Gift::class);
+    }
+
+    public function fund()
+    {
+        return $this->belongsTo(Fund::class);
+    }
+
+    public function plan()
+    {
+        return $this->hasOne(Plan::class);
     }
 }

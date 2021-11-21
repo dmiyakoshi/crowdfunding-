@@ -15,20 +15,20 @@
                 <input type="text" name="name"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
                     required placeholder="20字以上40字以下" value="{{ old('name') }}">
-                <label class="block text-white mb-2" for="money">
+                <label class="block text-white mb-2" for="price">
                     金額
                 </label>
-                <input type="text" name="money"
+                <input type="text" name="price"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="目標額を記入" value="{{ old('money') }}">
+                    required placeholder="リターンの金額を記入" value="{{ old('price') }}">
             </div>
             <div class="mb-4">
-                <label class="block text-white mb-2" for="content">
+                <label class="block text-white mb-2" for="description">
                     リターンの説明
                 </label>
-                <textarea name="introduction" rows="10"
+                <textarea name="description" rows="10"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="250文字以上??文字以下">{{ old('content') }}</textarea>
+                    required placeholder="？？文字以上??文字以下">{{ old('description') }}</textarea>
             </div>
             {{-- <div class="mb-4"> //複数画像は記事のどこに表示するか情報がないので後回し
                 <label class="block text-white mb-2" for="file">画像</label>

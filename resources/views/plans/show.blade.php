@@ -1,6 +1,5 @@
 <x-app-layout>
     <div class="container lg:w-3/4 md:w-4/5 w-11/12 mx-auto my-8 px-4 py-4 bg-white shadow-md">
-        {{-- {{ dd($plan,$plan->method()) }} --}}
         <x-flash-message :message="session('notice')" />
         <x-validation-errors :errors="$errors" />
 
@@ -13,9 +12,12 @@
                     <span>作成日 {{ $plan->created_at->format('Y-m-d') }}</span>
                 </div>
             </div>
+            <p class="text-gray-700 text-base text-right">募集開始日 :{{ $plan->relese_date }}</p>
             <p class="text-gray-700 text-base text-right">募集期限 :{{ $plan->due_date }}</p>
             <h2 class="font-bold font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
                 {{ $plan->title }}</h2>
+            <h6 class="font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
+                目標金額: {{ $plan->goal }}</h6>
             <div class="flex mt-1 mb-3">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                     <div><img src="{{ $plan->user->profile_photo_url }}" alt=""
@@ -61,7 +63,9 @@
         </article>
 
         <div class="flex flex-col sm:flex-row items-center sm:justify-end text-center my-4">
-            @if (Auth::guard(\App\Consts\UserConst::GUARD)->check())
+            {{-- {{ Auth::guard('fund')->check() }} --}}
+            @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
+    Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan))
                 <a href="{{ route('plans.gifts.create', $plan) }}"
                     class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32 sm:mr-2 mb-2 sm:mb-0">リターン作成</a>
             @endif
@@ -80,5 +84,52 @@
                 </form>
             @endif
         </div>
+
+        <br>
+        <hr class="grid grid-cols-1 divide-y divide-blue-700 my-6">
+        <br>
+        <p class="text-gray-700 text-2xl">リターンを選ぶ
+        </p>
+        @foreach ($gifts as $gift) {{-- リターンを表示 --}}
+            {{-- {{ dd($gift->imageUrl, $gift->photo) }} --}}
+            {{-- <div class="max-xl bg-white border-2 border-gray-300 p-5 rounded-md tracking-wide shadow-lg">
+                <div id="header" class="flex">
+                    <img alt="image" class="rounded-md border-2 border-gray-300"
+                        src="{{ $gift->imageUrl }}" />
+                    <div id="body" class="flex flex-col ml-5">
+                        <h4 id="name" class="text-xl font-semibold mb-2">{{ $gift->description }}</h4>
+                        <p id="job" class="text-gray-800 mt-2"></p>
+                        <div class="flex mt-5 text-lg">
+                            <p class="ml-3">価格: {{ $gift->price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
+            <div class="md:flex border-2 border-gray-300 max-w-2xl object-contain px-4">
+                <div class="md:flex-shrink-0">
+                    <img class="rounded-lg md:w-56" src="{{ $gift->imageUrl }}" width="448" height="299"
+                        alt="image return">
+                </div>
+                <div class="mt-4 md:mt-0 md:ml-6">
+                    <p class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">
+                        {{ $gift->name }}</p>
+                    <p class="mt-2 text-gray-600">{{ $gift->description }}</p>
+                    <p class="mt-2 text-gray-600">金額: {{ $gift->price }}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-center sm:justify-end text-center my-4">
+                    @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
+    Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan))
+                        <a href="{{ route('plans.gifts.edit', [$plan, $gift]) }}"
+                            class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">編集</a>
+                    @endif
+                    @if (Auth::guard(\App\Consts\fundConst::GUARD)->check()) 
+                    {{-- &&Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan)) --}}
+                        {{-- <a href="{{ route('plans.gifts.edit', [$plan, $gift]) }}"
+                            class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">編集</a> --}}
+                            <p>支援する</p>
+                    @endif
+                </div>
+            </div>
+        @endforeach
     </div>
 </x-app-layout>

@@ -87,4 +87,9 @@ class Plan extends Model
     {
         return $this->hasMany(Gift::class);
     }
+
+    public function supports()
+    {
+        return $this->hasMany(Support::class);
+    }
 }

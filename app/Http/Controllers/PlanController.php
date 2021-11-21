@@ -66,10 +66,11 @@ class PlanController extends Controller
                     throw new Exception('ファイルの保存に失敗しました。');
                 }
                 $photo = new Photo([
-                    'plan_id' => $plan->id,
                     'name' => $file->getClientOriginalName(),
                     'path' => basename($path)
                 ]);
+
+                $photo->plan_id = $plan->id;
 
                 $photo->save();
             }

@@ -33,8 +33,7 @@ class CreatePlansTable extends Migration
             //     ->cascadeOnDelete(); //募集方法を選択 All in OR All or Nothig
             $table->date('relese_date'); //公開日
             $table->date('due_date'); //募集期間
-            $table->boolean('relese_flag'); //募集を開始しているかのフラグ 1で募集状態
-            $table->boolean('public'); //公開状態を判別 0だと非表示
+            $table->boolean('public'); //表示・非表示を判別 0だと非表示
             $table->timestamps();
         });
     }
