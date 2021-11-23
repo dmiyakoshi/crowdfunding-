@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Consts\UserConst;
+use App\Consts\FundConst;
 use App\Models\Method;
 use App\Models\Photo;
 use App\Models\Plan;
@@ -52,7 +53,6 @@ class PlanController extends Controller
         $plan->user_id = $request->user()->id;
 
         $plan->public = 0;
-        $plan->relese_flag = 0;
 
         $files = $request->file('file');
 // dd($request, $plan);
@@ -101,8 +101,16 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
+        $supports = "";
+
         $gifts = Gift::where('plan_id', $plan->id)->get(); // プロジェクトのリターンを渡す
-        return view('plans.show', compact('plan', 'gifts'));
+
+        if (Auth::guard(FundConst::GUARD)->check()) {
+            $supports = $plan->supports()
+                ->where('plan_id', Auth::guard(FundConst::GUARD)->user()->id);
+        }
+
+        return view('plans.show', compact('plan', 'gifts', 'supports'));
     }
 
     /**

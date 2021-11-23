@@ -123,10 +123,7 @@
                             class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">編集</a>
                     @endif
                     @if (Auth::guard(\App\Consts\fundConst::GUARD)->check()) 
-                    {{-- &&Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan)) --}}
-                        {{-- <a href="{{ route('plans.gifts.edit', [$plan, $gift]) }}"
-                            class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">編集</a> --}}
-                            <p>支援する</p>
+                        <a href="{{ route('supports.create', [$plan, $gift]) }}" class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
                     @endif
                 </div>
             </div>

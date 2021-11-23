@@ -16,7 +16,7 @@ class UserController extends Controller
     public function dashboard()
     {
         $plans = Plan::latest()
-            ->with('user') //不安 eager loadはuserでいいのか?
+            ->with('supports') 
             ->Myplan()
             ->paginate(5);
 

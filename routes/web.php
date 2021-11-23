@@ -4,6 +4,7 @@ use App\Http\Controllers\GiftController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SupportController;
+use App\Policies\FundPolicy;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,10 @@ Route::resource('plans.gifts', GiftController::class)
     ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
 Route::resource('plans.supports', SupportController::class)
-    ->only(['store', 'create', 'destroy'])
+    ->only(['store', 'destroy'])
     ->middleware(['auth:funds']);
+
+Route::get('plans/{plan}/supports/gift/{gift?}/create', [SupportController::class, 'create'])
+    ->name('supports.create');
 
 require __DIR__ . '/auth.php';

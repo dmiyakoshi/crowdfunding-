@@ -68,6 +68,13 @@ class Plan extends Model
         return $imageUrls;
     }
 
+    public function getReleseFlagAttribute()
+    {
+        $now = \Carbon\Carbon::now()->format("Y-m-d");
+
+        return $now >= $this->relese_date; //今日の日付が募集開始日よりあとならtrue
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
