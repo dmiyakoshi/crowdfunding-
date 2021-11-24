@@ -41,7 +41,7 @@ class SupportController extends Controller
         return redirect()->route('plans.show', $plan)->with('notice', '支援情報を登録しました');
     }
 
-    public function destroy(Support $support)
+    public function destroy(Plan $plan, Support $support)
     {
         try {
             $support->delete();
@@ -49,6 +49,6 @@ class SupportController extends Controller
             return back()->withErrors('支援情報の削除に失敗しました');
         }
 
-        redirect()->route('plans,index')->with('notice', '支援情報を削除しました');
+        redirect()->route('plans.index')->with('notice', '支援情報を削除しました');
     }
 }

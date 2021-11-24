@@ -101,13 +101,13 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
-        $supports = "";
-
         $gifts = Gift::where('plan_id', $plan->id)->get(); // プロジェクトのリターンを渡す
 
         if (Auth::guard(FundConst::GUARD)->check()) {
-            $supports = $plan->supports()
+            $supports = $plan->supports
                 ->where('plan_id', Auth::guard(FundConst::GUARD)->user()->id);
+        } else {
+            $supports = "";
         }
 
         return view('plans.show', compact('plan', 'gifts', 'supports'));

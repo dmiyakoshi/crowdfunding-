@@ -61,7 +61,6 @@
                 <p class="text-gray-700 text-base">{!! nl2br(e($plan->how_use_money)) !!}</p>
             </div>
         </article>
-
         <div class="flex flex-col sm:flex-row items-center sm:justify-end text-center my-4">
             {{-- {{ Auth::guard('fund')->check() }} --}}
             @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
@@ -79,7 +78,7 @@
                 <form action="{{ route('plans.destroy', $plan) }}" method="post" class="w-full sm:w-32">
                     @csrf
                     @method('DELETE')
-                    <input type="submit" value="削除" onclick="if(!confirm('削除しますか？')){return false};"
+                    <input type="submit" value="削除" onclick="if(!confirm('プロジェクトを削除しますか？')){return false};"
                         class="bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
                 </form>
             @endif
@@ -102,19 +101,56 @@
                     <p class="mt-2 text-gray-600">{{ $gift->description }}</p>
                     <p class="mt-2 text-gray-600">金額: {{ $gift->price }}</p>
                 </div>
+                {{-- リターンの編集と削除 --}}
                 <div class="flex flex-col sm:flex-row items-center sm:justify-end text-center my-4">
                     @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
     Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan))
                         <a href="{{ route('plans.gifts.edit', [$plan, $gift]) }}"
                             class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">編集</a>
                     @endif
-
-                    @if (Auth::guard(\App\Consts\fundConst::GUARD)->check()) 
-                        <a href="{{ route('supports.create', [$plan, $gift]) }}" class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
+                    @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
+    Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('delete', $plan))
+                        <form action="{{ route('plans.gifts.delete', [$plan, $gift]) }}" method="post"
+                            class="w-full sm:w-32">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="削除" onclick="if(!confirm('リターンを削除しますか？')){return false};"
+                                class="bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
+                        </form>
                     @endif
-
+                    {{-- 支援周りの表示 --}}
+                    @if (Auth::guard(\App\Consts\fundConst::GUARD)->check())
+                        <a href="{{ route('supports.create', [$plan, $gift]) }}"
+                            class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
+                    @endif
                 </div>
             </div>
         @endforeach
+
+        @if (count($supports) >= 1 && Auth::guard(\App\Consts\fundConst::GUARD)->check())
+            <p class="text-gray-700 text-2xl">購入したリターン
+            </p>
+            @foreach ($supports as $support)
+                <div class="md:flex border-2 border-gray-300 max-w-2xl object-contain px-4">
+                    <div class="md:flex-shrink-0">
+                        <img class="rounded-lg md:w-56" src="{{ $support->gift->imageUrl }}" width="448" height="299"
+                            alt="image return">
+                    </div>
+                    <div class="mt-4 md:mt-0 md:ml-6">
+                        <p class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">
+                            {{ $support->gift->name }}</p>
+                        <p class="mt-2 text-gray-600">{{ $support->gift->description }}</p>
+                        <p class="mt-2 text-gray-600">金額: {{ $support->gift->price }}</p>
+                    </div>
+                    <form action="{{ route('plans.supports.destroy', [$plan, $support]) }}" method="post"
+                            class="w-full sm:w-32">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="削除" onclick="if(!confirm('購入を取りやめますか？')){return false};"
+                                class="bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
+                        </form>
+                </div>
+            @endforeach
+        @endif
     </div>
 </x-app-layout>

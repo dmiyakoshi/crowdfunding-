@@ -19,7 +19,7 @@ class Support extends Model
 
     public function gift()
     {
-        return $this->hasOne(Gift::class);
+        return $this->belongsTo(Gift::class);
     }
 
     public function fund()

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Consts\FundConst;
 use App\Models\Plan;
+use App\Models\Fund;
+use App\Models\Gift;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
