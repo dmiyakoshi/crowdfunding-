@@ -66,9 +66,4 @@ class Gift extends Model
     {
         return $this->hasMany(Support::class);
     }
-
-    public function support()
-    {
-        return $this->belongsTo(Support::class);
-    }
 }

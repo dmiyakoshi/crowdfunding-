@@ -18,18 +18,20 @@ class SupportController extends Controller
 
     public function store(Plan $plan, Gift $gift)
     {
+
         $support = new Support();
 
         $support->plan_id = $plan->id;
+
         if (Auth::guard(FundConst::GUARD)->check()) {
-            $support->fund_id = auth()->user()->id;
+            $support->fund_id = Auth::guard(FundConst::GUARD)->user()->id;
         }
 
         if (isset($gift)) {
-            $support->gift_id = $gift->is;
+            $support->gift_id = $gift->id;
             $support->money = $gift->price;
         }
-
+// dd($support);
         try {
             $support->save();
         } catch (\Throwable $th) {
@@ -39,8 +41,14 @@ class SupportController extends Controller
         return redirect()->route('plans.show', $plan)->with('notice', '支援情報を登録しました');
     }
 
-    public function destroy()
+    public function destroy(Support $support)
     {
-        //
+        try {
+            $support->delete();
+        } catch (\Throwable $th) {
+            return back()->withErrors('支援情報の削除に失敗しました');
+        }
+
+        redirect()->route('plans,index')->with('notice', '支援情報を削除しました');
     }
 }

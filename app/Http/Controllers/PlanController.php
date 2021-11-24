@@ -23,7 +23,7 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::with('user')->latest()->Paginate(12); //20は多い 16? 8は少ない
+        $plans = Plan::with('user')->latest()->Paginate(10); //20は多い 16? 8は少ない
 
         return view('plans.index', compact('plans'));
     }
@@ -159,14 +159,56 @@ class PlanController extends Controller
                 ->withErrors('自分のプロジェクト以外は削除できません');
         }
 
+        DB::beginTransaction();
+
         try {
+            $paths = $plan->image_paths;
+            foreach ($paths as $path) {
+                if (!Storage::delete($path)) {
+                    throw new Exception('ファイルの削除に失敗しました');
+                }
+            }
+            $photos = $plan->photos();
+            
+            foreach ($photos as $photo) {
+                $photo->delete();
+            }
+            
+            $gifts = $plan->gifts();
+            
+            foreach ($gifts as $gift) {
+                $path = $gift->image_path;
+                
+                if (Storage::delete($path)) {
+                    throw new Exception('ファイルの削除に失敗しました');
+                }
+                
+                $supports = $gift->supports;
+                
+                foreach ($supports as $support) {
+                    $support->delete();
+                }
+                
+                $gift->delete();
+            }
+            
             $plan->delete();
+
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollBack();
             return back()->withInput()
                 ->withErrors('プロジェクト削除処理でエラーが発生しました');
         }
 
         return redirect()->route('plans.index')
             ->with('notice', '求人情報を削除しました');
+    }
+
+    public function changePublic(Plan $plan)
+    {
+        $plan->public = 1;
+
+        return redirect()->route('plans.show', compact('plan'))->with('状態を公開に変更しました');
     }
 }

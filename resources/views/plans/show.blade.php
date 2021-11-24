@@ -91,20 +91,6 @@
         <p class="text-gray-700 text-2xl">リターンを選ぶ
         </p>
         @foreach ($gifts as $gift) {{-- リターンを表示 --}}
-            {{-- {{ dd($gift->imageUrl, $gift->photo) }} --}}
-            {{-- <div class="max-xl bg-white border-2 border-gray-300 p-5 rounded-md tracking-wide shadow-lg">
-                <div id="header" class="flex">
-                    <img alt="image" class="rounded-md border-2 border-gray-300"
-                        src="{{ $gift->imageUrl }}" />
-                    <div id="body" class="flex flex-col ml-5">
-                        <h4 id="name" class="text-xl font-semibold mb-2">{{ $gift->description }}</h4>
-                        <p id="job" class="text-gray-800 mt-2"></p>
-                        <div class="flex mt-5 text-lg">
-                            <p class="ml-3">価格: {{ $gift->price }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
             <div class="md:flex border-2 border-gray-300 max-w-2xl object-contain px-4">
                 <div class="md:flex-shrink-0">
                     <img class="rounded-lg md:w-56" src="{{ $gift->imageUrl }}" width="448" height="299"
@@ -122,9 +108,11 @@
                         <a href="{{ route('plans.gifts.edit', [$plan, $gift]) }}"
                             class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">編集</a>
                     @endif
+
                     @if (Auth::guard(\App\Consts\fundConst::GUARD)->check()) 
                         <a href="{{ route('supports.create', [$plan, $gift]) }}" class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
                     @endif
+
                 </div>
             </div>
         @endforeach

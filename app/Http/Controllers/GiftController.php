@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Gift;
 use App\Models\Photo;
 use App\Models\Plan;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -43,7 +44,7 @@ class GiftController extends Controller
         $gift->plan_id = $plan->id;
 
         $file = $request->file('file');
-// dd($request->file('file'), $request, $files);
+        // dd($request->file('file'), $request, $files);
 
         DB::beginTransaction();
 
@@ -79,7 +80,6 @@ class GiftController extends Controller
             $photo->save();
 
             DB::commit();
-
         } catch (\Exception $e) {
             if (isset($gift)) {
                 $paths = $gift->getImageUrls();
@@ -91,7 +91,7 @@ class GiftController extends Controller
             }
 
             DB::rollBack();
-            return back()->withErrors('登録処理に失敗しました');
+            return back()->withErrors('リターンの登録に失敗しました');
         }
 
         return redirect()->route('plans.show', compact('plan'))->with('notice', 'リターンを登録しました');
@@ -114,9 +114,9 @@ class GiftController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Gift $gift)
     {
-        //
+        return view('plans.gifts.edit', compact('gift'));
     }
 
     /**
@@ -126,9 +126,19 @@ class GiftController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Gift $gift)
     {
-        //
+        $plan = Plan::find($gift->plan_id);
+
+        $gift->fill($request->all());
+
+        try {
+            $gift->save();
+        } catch (\Throwable $th) {
+            back()->withErrors('リターン情報の更新に失敗しました');
+        }
+
+        return redirect()->route('plans.show', compact('plan'))->with('notice', 'リターンの情報を更新しました');
     }
 
     /**
@@ -137,8 +147,33 @@ class GiftController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Gift $gift)
     {
-        //
+        $plan = Plan::find($gift->plan_id);
+
+        $supports = $gift->supports();
+
+        DB::beginTransaction();
+
+        try {
+            $path = $gift->image_path;
+            if (!Storage::delete($path)) {
+                throw new Exception('ファイルの削除に失敗しました');
+            }
+            $photo = Photo::where('gift_id', $gift->id);
+            $photo->delete();
+
+            foreach ($supports as $support) {
+                $support->delete();
+            }
+
+            $gift->delete();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            return back()->withErrors('リターン情報の削除に失敗しました');
+        }
+
+        return redirect()->route('plans.show', compact('plan'))->with('notice', 'リターン情報を削除しました');
     }
 }

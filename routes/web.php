@@ -32,6 +32,10 @@ Route::resource('plans', PlanController::class)
     ->only(['create', 'store', 'edit', 'update', 'destroy'])
     ->middleware('auth:users');
 
+Route::get('plans/{plan}/change/public', [PlanController::class, 'changePublic'])
+    ->middleware('auth:users')
+    ->name('plans.change.public');
+
 Route::resource('plans', PlanController::class)
     ->only(['show', 'index']);
 
@@ -40,10 +44,15 @@ Route::resource('plans.gifts', GiftController::class)
     ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
 Route::resource('plans.supports', SupportController::class)
-    ->only(['store', 'destroy'])
+    ->only(['destroy'])
     ->middleware(['auth:funds']);
 
-Route::get('plans/{plan}/supports/gift/{gift?}/create', [SupportController::class, 'create'])
+Route::get('plans/{plan}/supports/create/gift/{gift?}', [SupportController::class, 'create'])
+    ->middleware(['auth:funds'])
     ->name('supports.create');
+
+Route::post('plans/{plan}/supports/srore/gift/{gift?}', [SupportController::class, 'store'])
+    ->middleware(['auth:funds'])
+    ->name('supports.store');
 
 require __DIR__ . '/auth.php';

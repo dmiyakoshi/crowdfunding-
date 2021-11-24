@@ -28,8 +28,9 @@ class CreateSupportsTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->integer('money');
+            $table->integer('money'); //支援した金額 or リターンの値段
             $table->timestamps();
+            $table->unique(['gift_id', 'fund_id']); //ひとまずはユニーク 出来れば一人で複数支援できるようにしたい
         });
     }
 

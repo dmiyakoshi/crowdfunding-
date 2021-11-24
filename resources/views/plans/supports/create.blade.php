@@ -15,7 +15,11 @@
         </div>
 
         <div>
-            <p>{{ $plan->title }}の{{ $gift->name }}に{{ $gift->price }}支援します</p>
+            <p>{{ $plan->title }}の{{ $gift->name }}: {{ $gift->price }}円を購入します</p>
         </div>
+        <form type="hidden" action="{{ route('supports.store', [$plan, $gift]) }}" method="post">
+            @csrf
+            <input type="submit" value="決定">
+        </form>
     </div>
 </x-app-layout>

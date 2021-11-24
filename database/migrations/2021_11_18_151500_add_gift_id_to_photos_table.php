@@ -14,7 +14,7 @@ class AddGiftIdToPhotosTable extends Migration
     public function up()
     {
         Schema::table('photos', function (Blueprint $table) {
-            $table->foreignId('gift_id')
+            $table->foreignId('gift_id') //リターンの写真を用意
                 ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

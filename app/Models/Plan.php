@@ -72,7 +72,25 @@ class Plan extends Model
     {
         $now = \Carbon\Carbon::now()->format("Y-m-d");
 
-        return $now >= $this->relese_date; //今日の日付が募集開始日よりあとならtrue
+        return $now >= $this->relese_date; //今日の日付が募集開始日より後の日付ならtrue 募集が開始
+    }
+
+    public function getTotalAttribute()
+    {
+        $total = 0;
+
+        $supports = $this->supports();
+
+        foreach ($supports as $support) {
+            $total += $support->money;
+        }
+
+        return $total;
+    }
+
+    public function getStartFlagAttribute()
+    {
+        return $this->releseFlag() && (($this->total() / $this->goal) >= 0.1);
     }
 
     public function user()
