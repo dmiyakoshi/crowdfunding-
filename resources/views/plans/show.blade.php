@@ -1,3 +1,4 @@
+{{-- {{ dd($plan->releseFlag , (($plan->total / $plan->goal) >= 0.1), $plan->total) }} --}}
 <x-app-layout>
     <div class="container lg:w-3/4 md:w-4/5 w-11/12 mx-auto my-8 px-4 py-4 bg-white shadow-md">
         <x-flash-message :message="session('notice')" />
@@ -11,13 +12,23 @@
                 <div>
                     <span>作成日 {{ $plan->created_at->format('Y-m-d') }}</span>
                 </div>
+                {{-- 確認 後で消す --}}
+                <div>
+                    <span>リリース前かの確認 {{ $plan->releseFlag }}</span>
+                </div>
+                <div>
+                    <span>募集開始できるかのフラグ {{ $plan->startFlag }}</span>
+                </div>
+                {{-- 確認終了 --}}
             </div>
             <p class="text-gray-700 text-base text-right">募集開始日 :{{ $plan->relese_date }}</p>
             <p class="text-gray-700 text-base text-right">募集期限 :{{ $plan->due_date }}</p>
             <h2 class="font-bold font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
                 {{ $plan->title }}</h2>
             <h6 class="font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
-                目標金額: {{ $plan->goal }}</h6>
+                目標金額: {{ $plan->goal }}円</h6>
+            <h6 class="font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
+                支援総額: {{ $plan->total }}円 達成率: {{ floor($plan->total * 100 / $plan->goal) }}%</h6>
             <div class="flex mt-1 mb-3">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                     <div><img src="{{ $plan->user->profile_photo_url }}" alt=""
@@ -61,8 +72,14 @@
                 <p class="text-gray-700 text-base">{!! nl2br(e($plan->how_use_money)) !!}</p>
             </div>
         </article>
+        {{-- プロジェクト変更、編集など --}}
         <div class="flex flex-col sm:flex-row items-center sm:justify-end text-center my-4">
-            {{-- {{ Auth::guard('fund')->check() }} --}}
+            @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
+    Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan) &&
+    $plan->public == 0)
+                <a href="{{ route('plans.change.public', $plan) }}" onclick="if(!confirm('公開してよろしいですか?')){return false};"
+                    class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32 sm:mr-2 mb-2 sm:mb-0">公開する</a>
+            @endif
             @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
     Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan))
                 <a href="{{ route('plans.gifts.create', $plan) }}"
@@ -110,7 +127,7 @@
                     @endif
                     @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
     Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('delete', $plan))
-                        <form action="{{ route('plans.gifts.delete', [$plan, $gift]) }}" method="post"
+                        <form action="{{ route('plans.gifts.destroy', [$plan, $gift]) }}" method="post"
                             class="w-full sm:w-32">
                             @csrf
                             @method('DELETE')
@@ -126,7 +143,6 @@
                 </div>
             </div>
         @endforeach
-
         @if (count($supports) >= 1 && Auth::guard(\App\Consts\fundConst::GUARD)->check())
             <p class="text-gray-700 text-2xl">購入したリターン
             </p>
@@ -143,12 +159,12 @@
                         <p class="mt-2 text-gray-600">金額: {{ $support->gift->price }}</p>
                     </div>
                     <form action="{{ route('plans.supports.destroy', [$plan, $support]) }}" method="post"
-                            class="w-full sm:w-32">
-                            @csrf
-                            @method('DELETE')
-                            <input type="submit" value="削除" onclick="if(!confirm('購入を取りやめますか？')){return false};"
-                                class="bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
-                        </form>
+                        class="w-full sm:w-32">
+                        @csrf
+                        @method('DELETE')
+                        <input type="submit" value="削除" onclick="if(!confirm('購入を取りやめますか？')){return false};"
+                            class="bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
+                    </form>
                 </div>
             @endforeach
         @endif

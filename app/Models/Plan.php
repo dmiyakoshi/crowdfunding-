@@ -79,18 +79,21 @@ class Plan extends Model
     {
         $total = 0;
 
-        $supports = $this->supports();
+        $supports = $this->supports;
 
         foreach ($supports as $support) {
             $total += $support->money;
         }
-
         return $total;
     }
 
     public function getStartFlagAttribute()
     {
-        return $this->releseFlag() && (($this->total() / $this->goal) >= 0.1);
+        if ($this->releseFlag) {
+            return (($this->total / $this->goal) >= 0.1);
+        } else {
+            return ;//
+        }
     }
 
     public function user()

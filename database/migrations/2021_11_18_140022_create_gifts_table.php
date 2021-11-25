@@ -19,9 +19,10 @@ class CreateGiftsTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('name');
-            $table->text('description');
-            $table->integer('price')->unsigned();
+            $table->string('name'); //リターンの名前
+            $table->text('description'); //リターンの説明
+            $table->integer('price')->unsigned(); //設定した金額
+            $table->boolean('limited_befor'); //公開前限定のリターンであるかの判別 1なら公開前限定
             $table->timestamps();
         });
     }

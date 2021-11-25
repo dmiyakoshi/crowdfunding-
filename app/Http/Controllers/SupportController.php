@@ -13,6 +13,15 @@ class SupportController extends Controller
 {
     public function create(Plan $plan, Gift $gift)
     {
+        if ($plan->releseflag ) {
+            if (!$plan->startFlag) {
+                return back()->withErrors('このプロジェクトはもう支援できません');
+            } else {
+                //none
+            }
+        } else {
+            //none
+        }
         return view('plans.supports.create', compact('plan', 'gift'));
     }
 
@@ -49,6 +58,6 @@ class SupportController extends Controller
             return back()->withErrors('支援情報の削除に失敗しました');
         }
 
-        redirect()->route('plans.index')->with('notice', '支援情報を削除しました');
+        redirect()->route('plans.show', compact('plan'))->with('notice', '支援情報を削除しました');
     }
 }

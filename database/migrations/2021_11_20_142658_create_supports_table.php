@@ -15,15 +15,15 @@ class CreateSupportsTable extends Migration
     {
         Schema::create('supports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('plan_id')
+            $table->foreignId('plan_id') //選択したプロジェクト
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('fund_id')
+            $table->foreignId('fund_id') //購入した支援者
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('gift_id')
+            $table->foreignId('gift_id') //必ずリターンを購入とは限らないのでnullable
                 ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()

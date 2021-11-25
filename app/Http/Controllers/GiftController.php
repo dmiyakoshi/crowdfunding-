@@ -147,11 +147,9 @@ class GiftController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Gift $gift)
+    public function destroy(Plan $plan, Gift $gift)
     {
-        $plan = Plan::find($gift->plan_id);
-
-        $supports = $gift->supports();
+        $supports = $gift->supports;
 
         DB::beginTransaction();
 
@@ -162,9 +160,10 @@ class GiftController extends Controller
             }
             $photo = Photo::where('gift_id', $gift->id);
             $photo->delete();
-
-            foreach ($supports as $support) {
-                $support->delete();
+            if (isset($supports)) {
+                foreach ($supports as $support) {
+                    $support->delete();
+                }
             }
 
             $gift->delete();

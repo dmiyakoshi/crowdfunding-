@@ -23,7 +23,7 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::with('user')->latest()->Paginate(10); //20は多い 16? 8は少ない
+        $plans = Plan::with('user')->where('public', 1)->latest()->Paginate(10); //20は多い 16? 8は少ない
 
         return view('plans.index', compact('plans'));
     }
@@ -55,7 +55,7 @@ class PlanController extends Controller
         $plan->public = 0;
 
         $files = $request->file('file');
-// dd($request, $plan);
+        // dd($request, $plan);
         DB::beginTransaction();
 
         try {
@@ -80,9 +80,9 @@ class PlanController extends Controller
             if (isset($plan)) {
                 $paths = $plan->image_paths;
                 foreach ($paths as $path) {
-                        if (Storage::exists($path)) {
-                            Storage::delete($path);
-                        }
+                    if (Storage::exists($path)) {
+                        Storage::delete($path);
+                    }
                 }
             }
 
@@ -104,10 +104,9 @@ class PlanController extends Controller
         $gifts = Gift::where('plan_id', $plan->id)->get(); // プロジェクトのリターンを渡す
 
         if (Auth::guard(FundConst::GUARD)->check()) {
-            $supports = $plan->supports
-                ->where('plan_id', Auth::guard(FundConst::GUARD)->user()->id);
+            $supports = $plan->supports->where('plan_id', Auth::guard(FundConst::GUARD)->user()->id);
         } else {
-            $supports = "";
+            $supports = [];
         }
 
         return view('plans.show', compact('plan', 'gifts', 'supports'));
@@ -136,7 +135,7 @@ class PlanController extends Controller
     public function update(Request $request, Plan $plan)
     {
         $plan->fill($request->all());
-// dd($plan);
+        // dd($plan);
         try {
             $plan->save();
         } catch (\Throwable $th) {
@@ -169,29 +168,29 @@ class PlanController extends Controller
                 }
             }
             $photos = $plan->photos();
-            
+
             foreach ($photos as $photo) {
                 $photo->delete();
             }
-            
+
             $gifts = $plan->gifts();
-            
-            foreach ($gifts as $gift) {
-                $path = $gift->image_path;
-                
-                if (Storage::delete($path)) {
-                    throw new Exception('ファイルの削除に失敗しました');
+            if (isset($gifts)) {
+                foreach ($gifts as $gift) {
+                    $path = $gift->image_path;
+                    if (Storage::delete($path)) {
+                        throw new Exception('ファイルの削除に失敗しました');
+                    }
+
+                    $supports = $gift->supports;
+                    if (isset($supports)) {
+                        foreach ($supports as $support) {
+                            $support->delete();
+                        }
+                    }
+                    $gift->delete();
                 }
-                
-                $supports = $gift->supports;
-                
-                foreach ($supports as $support) {
-                    $support->delete();
-                }
-                
-                $gift->delete();
             }
-            
+
             $plan->delete();
 
             DB::commit();
@@ -201,14 +200,14 @@ class PlanController extends Controller
                 ->withErrors('プロジェクト削除処理でエラーが発生しました');
         }
 
-        return redirect()->route('plans.index')
-            ->with('notice', '求人情報を削除しました');
+        return redirect()->route('plans.index')->with('notice', 'プロジェクトを削除しました');
     }
 
     public function changePublic(Plan $plan)
     {
         $plan->public = 1;
+        $plan->save();
 
-        return redirect()->route('plans.show', compact('plan'))->with('状態を公開に変更しました');
+        return redirect()->route('plans.show', compact('plan'))->with('notice', 'プロジェクトを公開に変更しました');
     }
 }
