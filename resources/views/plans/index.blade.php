@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-flash-message :message="session('notice')" />
-    <div class="container mx-auto w-4/5 my-8 px-4 py-4">
+    <div class="container mx-auto  my-8 px-4 py-4">
         {{-- <div class="flex justify-end items-center mb-3"> 検索は後回し
             <h4 class="text-gray-400 text-sm">並び替え</h4>
             <ul class="flex">

@@ -23,7 +23,7 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plansPre = Plan::with('user')->where('public', 1)->latest()->paginate(10); //20は多い 16? 8は少ない
+        // $plansPre = Plan::with('user')->where('public', 1)->latest()->paginate(10); //20は多い 16? 8は少ない
         // dd($plansPre);
         // $plansPre = $plansPre->setAtr();
         // // dd($plansPre);
@@ -89,6 +89,10 @@ class PlanController extends Controller
         $plan->user_id = $request->user()->id;
 
         $plan->public = 0;
+        
+        if ($request->relese_date >= $request->due_date) {
+            return back()->withErrors("募集終了日は募集開始日より後の日付にしてください");
+        }
 
         $files = $request->file('file');
         // dd($request, $plan);
@@ -174,6 +178,11 @@ class PlanController extends Controller
         // dd($request);
         $plan->fill($request->all());
         // dd($plan);
+
+        if ($plan->relese_data >= $plan->due_data) {
+            return back()->withErrors("募集終了日は募集開始日より後の日付にしてください");
+        }
+
         try {
             $plan->save();
         } catch (\Throwable $th) {

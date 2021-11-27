@@ -43,7 +43,7 @@
                     <option disabled selected value="">選択してください</option>
                         <option value="0" @if (0 == old('limited_befor')) selected @endif>通常
                         </option>
-                        <option value="1" @if (1 == old('limited_befor')) selected @endif>事前限定</option>
+                        <option value="1" @if (1 == old('limited_befor')) selected @endif>募集開始前限定</option>
                 </select>
             </div>
             <div class="mb-4">

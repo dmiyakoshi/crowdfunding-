@@ -128,7 +128,7 @@ class Plan extends Model
     {
         $now = \Carbon\Carbon::now()->format("Y-m-d");
 
-        return $now >= $this->due_date; //今日の日付が募集期限より後の日付ならtrue 募集を終了
+        return $now > $this->due_date; //今日の日付が募集期限より後の日付ならtrue 募集を終了
     }
 
     public function user()

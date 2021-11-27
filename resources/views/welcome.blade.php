@@ -31,7 +31,7 @@
                         <div class="w-4/5 z-10">
                             <h2 class="text-xl xl:text-3xl italic mb-6">Crowdfunding</h2>
                             <div class="sm:text-sm xl:text-md text-gray-200 font-normal">このサイトはクラウドファンディングの起案者と支援者をマッチングするサービスです。</div>
-                            <div class="text-xs sm:text-2xl xl:text-4xl font-normal leading-tight mt-6 mb-6"><a href="{{ route('plans.index') }}">プロジェクトを探す</a></div>
+                            <div class="text-base sm:text-2xl xl:text-4xl font-medium leading-tight mt-6 mb-6"><a href="{{ route('plans.index') }}">プロジェクトを探す</a></div>
                         </div>
                         <div class="md:flex md:items-center md:justify-center w-full sm:w-auto md:h-full w-2/5 xl:w-2/5 p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none relative z-11">
                             <div class="max-w-md w-full space-y-8">

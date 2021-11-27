@@ -43,7 +43,7 @@ class GiftController extends Controller
         // dd($request);
         $gift = new Gift($request->all());
         $gift->plan_id = $plan->id;
-// dd($gift);
+
         $file = $request->file('file');
         // dd($request->file('file'), $request, $files);
 
@@ -129,8 +129,6 @@ class GiftController extends Controller
      */
     public function update(Request $request, Plan $plan, Gift $gift)
     {
-        $plan = Plan::find($gift->plan_id);
-
         $gift->fill($request->all());
 
         try {
