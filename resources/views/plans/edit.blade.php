@@ -18,7 +18,7 @@
                 <label class="block text-white mb-2" for="heading_do">
                     目標額
                 </label>
-                <input type="text" name="heading_do"
+                <input type="text" name="goal"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
                     required placeholder="目標額を記入" value="{{ old('goal', $plan->goal) }}">
             </div>
@@ -67,7 +67,7 @@
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
                     required placeholder="??字以上？？字以下" value="{{ old('heading_reason', $plan->heading_reason) }}">
             </div>
-            <textarea name="description_do" rows="10"
+            <textarea name="description_reason" rows="10"
                 class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
                 required placeholder="詳細">{{ old('description_reason', $plan->description_reason) }}</textarea>
             {{-- <div class="mb-4">
@@ -105,7 +105,7 @@
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="due_date">
-                    公開日
+                    募集正式開始日
                 </label>
                 <input type="date" name="relese"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"

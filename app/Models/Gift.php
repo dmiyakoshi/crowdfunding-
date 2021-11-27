@@ -14,6 +14,7 @@ class Gift extends Model
         'name',
         'price',
         'description',
+        'limited_befor',
     ];
 
     public function getImagePathAttribute()

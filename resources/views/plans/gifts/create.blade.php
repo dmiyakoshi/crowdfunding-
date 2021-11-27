@@ -28,12 +28,24 @@
                 </label>
                 <textarea name="description" rows="10"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="？？文字以上??文字以下">{{ old('description') }}</textarea>
+                    required placeholder="このリターンの内容の紹介や説明を入力してください">{{ old('description') }}</textarea>
             </div>
             {{-- <div class="mb-4"> //複数画像は記事のどこに表示するか情報がないので後回し
                 <label class="block text-white mb-2" for="file">画像</label>
                 <input type="file" name="file[]" id="file" class="" multiple>
             </div> --}}
+            <div class="mb-4">
+                <label class="block text-white mb-2" for="occupation_id">
+                    募集方法
+                </label>
+                <select name="limited_befor"
+                    class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3">
+                    <option disabled selected value="">選択してください</option>
+                        <option value="0" @if (0 == old('limited_befor')) selected @endif>通常
+                        </option>
+                        <option value="1" @if (1 == old('limited_befor')) selected @endif>事前限定</option>
+                </select>
+            </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="file">画像</label>
                 <input type="file" name="file" id="file" class="">

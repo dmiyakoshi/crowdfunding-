@@ -1,4 +1,4 @@
-{{-- {{ dd($plan->releseFlag , (($plan->total / $plan->goal) >= 0.1), $plan->total) }} --}}
+{{-- {{ dd($plan->releseFlag , (($plan->total / $plan->goal) >= 0.1), $plan->total, $plan->startFlag) }} --}}
 <x-app-layout>
     <div class="container lg:w-3/4 md:w-4/5 w-11/12 mx-auto my-8 px-4 py-4 bg-white shadow-md">
         <x-flash-message :message="session('notice')" />
@@ -28,7 +28,7 @@
             <h6 class="font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
                 目標金額: {{ $plan->goal }}円</h6>
             <h6 class="font-sans break-normal text-gray-900 pt-6 pb-1 text-3xl md:text-4xl">
-                支援総額: {{ $plan->total }}円 達成率: {{ floor($plan->total * 100 / $plan->goal) }}%</h6>
+                支援総額: {{ $plan->total }}円 達成率: {{ floor(($plan->total * 100) / $plan->goal) }}%</h6>
             <div class="flex mt-1 mb-3">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                     <div><img src="{{ $plan->user->profile_photo_url }}" alt=""
@@ -77,7 +77,8 @@
             @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
     Auth::guard(\App\Consts\UserConst::GUARD)->user()->can('update', $plan) &&
     $plan->public == 0)
-                <a href="{{ route('plans.change.public', $plan) }}" onclick="if(!confirm('公開してよろしいですか?')){return false};"
+                <a href="{{ route('plans.change.public', $plan) }}"
+                    onclick="if(!confirm('公開してよろしいですか?')){return false};"
                     class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32 sm:mr-2 mb-2 sm:mb-0">公開する</a>
             @endif
             @if (Auth::guard(\App\Consts\UserConst::GUARD)->check() &&
@@ -104,7 +105,7 @@
         <br>
         <hr class="grid grid-cols-1 divide-y divide-blue-700 my-6">
         <br>
-        <p class="text-gray-700 text-2xl">リターンを選ぶ
+        <p class="text-gray-700 text-2xl">このプロジェクトのリターン
         </p>
         @foreach ($gifts as $gift) {{-- リターンを表示 --}}
             <div class="md:flex border-2 border-gray-300 max-w-2xl object-contain px-4">
@@ -114,7 +115,10 @@
                 </div>
                 <div class="mt-4 md:mt-0 md:ml-6">
                     <p class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">
-                        {{ $gift->name }}</p>
+                        {{ $gift->name }} 
+                        @if ($gift->limited_befor == 1)
+                            募集開始前限定
+                        @endif</p>
                     <p class="mt-2 text-gray-600">{{ $gift->description }}</p>
                     <p class="mt-2 text-gray-600">金額: {{ $gift->price }}</p>
                 </div>
@@ -136,10 +140,22 @@
                         </form>
                     @endif
                     {{-- 支援周りの表示 --}}
-                    @if (Auth::guard(\App\Consts\fundConst::GUARD)->check())
+                    @if (Auth::guard(\App\Consts\fundConst::GUARD)->check() && ($plan->endFlag == true || ($plan->startFlag == false && $plan->releseFlag == true)))
+                        <p>受付を終了しました</p>
+                    @else
+                        @if (Auth::guard(\App\Consts\fundConst::GUARD)->check() && $gift->limited_befor == 1 && $plan->releseFlag == true)
+                            <p>募集開始前のみ購入できます</p>
+                        @else
+                            @if (Auth::guard(\App\Consts\fundConst::GUARD)->check())
+                                <a href="{{ route('supports.create', [$plan, $gift]) }}"
+                                class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
+                            @endif
+                        @endif
+                    @endif
+                    {{-- @if (Auth::guard(\App\Consts\fundConst::GUARD)->check())
                         <a href="{{ route('supports.create', [$plan, $gift]) }}"
                             class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         @endforeach

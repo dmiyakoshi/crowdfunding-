@@ -23,7 +23,43 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::with('user')->where('public', 1)->latest()->Paginate(10); //20は多い 16? 8は少ない
+        $plansPre = Plan::with('user')->where('public', 1)->latest()->paginate(10); //20は多い 16? 8は少ない
+        // dd($plansPre);
+        // $plansPre = $plansPre->setAtr();
+        // // dd($plansPre);
+        // $filtered = $plansPre->filter(function ($v) {
+        //     if ($v['end_flag']) {                   //募集終了しているプロジェクトは表示させない
+        //         return false;
+        //     } else if ($v['relese_flag']) {         //募集開始ならば基準に満たしていないプロジェクトを除外する
+        //         return $v['start_flag'] == true;
+        //     } else {
+        //         return true;
+        //     }
+        // })->values();
+        // dd($filtered);
+
+        // foreach ($filtered as $filter) {
+        //     $plans[] = Plan::find($filter['id']);
+        // }
+        // $plans = $filtered;
+        // dd($plans);
+
+        // $plans = new LengthAwarePaginator(
+        //     $filtered->forPage($filtered->page, 5),
+        //     count($filtered),
+        //     5,
+        //     $filtered->page,
+        //     array('path' => '/plans')
+        // );
+
+        // dd($plans);
+
+        $query = Plan::query();
+        $query->with('user')->where('public', 1);
+        $query->where('due_date', '>=', now());
+        // $query->where('relese_date', '<=', now());
+        $plans = $query->latest()->paginate(10);
+        // dd($plans);
 
         return view('plans.index', compact('plans'));
     }
@@ -103,8 +139,9 @@ class PlanController extends Controller
     {
         $gifts = Gift::where('plan_id', $plan->id)->get(); // プロジェクトのリターンを渡す
 
-        if (Auth::guard(FundConst::GUARD)->check()) {
-            $supports = $plan->supports->where('plan_id', Auth::guard(FundConst::GUARD)->user()->id);
+        if (Auth::guard(FundConst::GUARD)->check()) { //支援者であればsupportの情報がほしい
+            $supports = $plan->supports->where('fund_id', Auth::guard(FundConst::GUARD)->user()->id);
+            //プロジェクト紐付いている支援情報から支援者のidが一致しているものを選ぶ
         } else {
             $supports = [];
         }
@@ -134,6 +171,7 @@ class PlanController extends Controller
      */
     public function update(Request $request, Plan $plan)
     {
+        // dd($request);
         $plan->fill($request->all());
         // dd($plan);
         try {
@@ -142,7 +180,7 @@ class PlanController extends Controller
             return back()->withErrors('更新作業でエラーが発生しました');
         }
 
-        return redirect()->route('plans.show', $plan)->with('notice', '情報を登録しました');
+        return redirect()->route('plans.show', $plan)->with('notice', '情報を更新しました');
     }
 
     /**
@@ -208,6 +246,6 @@ class PlanController extends Controller
         $plan->public = 1;
         $plan->save();
 
-        return redirect()->route('plans.show', compact('plan'))->with('notice', 'プロジェクトを公開に変更しました');
+        return redirect()->route('plans.show', $plan)->with('notice', 'プロジェクトを公開に変更しました');
     }
 }

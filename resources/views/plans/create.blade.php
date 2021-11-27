@@ -102,7 +102,7 @@
         </div>
         <div class="container lg:w-1/2 md:w-4/5 w-11/12 mx-auto mt-8 px-8 bg-blue-400 shadow-md rounded-md">
             <div class="mb-4">
-                <label class="block text-white mb-2" for="occupation_id">
+                <label class="block text-white mb-2" for="method_id">
                     募集方法
                 </label>
                 <select name="method_id"
@@ -116,7 +116,7 @@
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="relese_date">
-                    公開日
+                    募集正式開始日
                 </label>
                 <input type="date" name="relese_date"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"

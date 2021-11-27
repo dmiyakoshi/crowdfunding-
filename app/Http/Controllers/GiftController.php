@@ -40,9 +40,10 @@ class GiftController extends Controller
      */
     public function store(Request $request, Plan $plan)
     {
+        // dd($request);
         $gift = new Gift($request->all());
         $gift->plan_id = $plan->id;
-
+// dd($gift);
         $file = $request->file('file');
         // dd($request->file('file'), $request, $files);
 
@@ -114,9 +115,9 @@ class GiftController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Gift $gift)
+    public function edit(Plan $plan, Gift $gift)
     {
-        return view('plans.gifts.edit', compact('gift'));
+        return view('plans.gifts.edit', compact('plan', 'gift'));
     }
 
     /**
@@ -126,7 +127,7 @@ class GiftController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Gift $gift)
+    public function update(Request $request, Plan $plan, Gift $gift)
     {
         $plan = Plan::find($gift->plan_id);
 
@@ -138,7 +139,7 @@ class GiftController extends Controller
             back()->withErrors('リターン情報の更新に失敗しました');
         }
 
-        return redirect()->route('plans.show', compact('plan'))->with('notice', 'リターンの情報を更新しました');
+        return redirect()->route('plans.show', $plan)->with('notice', 'リターンの情報を更新しました');
     }
 
     /**
@@ -173,6 +174,6 @@ class GiftController extends Controller
             return back()->withErrors('リターン情報の削除に失敗しました');
         }
 
-        return redirect()->route('plans.show', compact('plan'))->with('notice', 'リターン情報を削除しました');
+        return redirect()->route('plans.show', $plan)->with('notice', 'リターン情報を削除しました');
     }
 }

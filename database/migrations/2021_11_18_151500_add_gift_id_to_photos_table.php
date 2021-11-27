@@ -19,7 +19,7 @@ class AddGiftIdToPhotosTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete()
-                ->after('user_id');
+                ->after('plan_id');
         });
     }
 

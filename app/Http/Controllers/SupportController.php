@@ -13,9 +13,9 @@ class SupportController extends Controller
 {
     public function create(Plan $plan, Gift $gift)
     {
-        if ($plan->releseflag ) {
-            if (!$plan->startFlag) {
-                return back()->withErrors('このプロジェクトはもう支援できません');
+        if ($plan->releseflag ) { //プロジェクトが募集しているならif文 true
+            if (!$plan->startFlag || $plan->endFlag) { //プロジェクトがすでに募集終了であるか、募集開始で基準にみたないものは支援不可
+                return back()->withErrors('このプロジェクトは支援できません');
             } else {
                 //none
             }
@@ -40,7 +40,7 @@ class SupportController extends Controller
             $support->gift_id = $gift->id;
             $support->money = $gift->price;
         }
-// dd($support);
+        // dd($support);
         try {
             $support->save();
         } catch (\Throwable $th) {
@@ -58,6 +58,6 @@ class SupportController extends Controller
             return back()->withErrors('支援情報の削除に失敗しました');
         }
 
-        redirect()->route('plans.show', compact('plan'))->with('notice', '支援情報を削除しました');
+        return redirect()->route('plans.show', $plan)->with('notice', '支援情報を削除しました');
     }
 }

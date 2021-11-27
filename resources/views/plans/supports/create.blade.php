@@ -13,7 +13,6 @@
                 <p class="mt-2 text-gray-600">金額: {{ $gift->price }}</p>
             </div>
         </div>
-
         <div>
             <p>{{ $plan->title }}の{{ $gift->name }}: {{ $gift->price }}円を購入します</p>
         </div>

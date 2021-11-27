@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\Paginator;
 
 class Plan extends Model
 {
@@ -27,6 +28,28 @@ class Plan extends Model
         'relese_date',
         'due_date',
     ];
+
+    protected $appends = [
+        'relese_flag',
+        'start_flag',
+        'end_flag',
+    ];
+
+    public function myPaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        $page = $page ?: Paginator::resolveCurrentPage($pageName);
+
+        $perPage = $perPage ?: $this->model->getPerPage();
+
+        $results = ($total = $this->toBase()->getCountForPagination())
+            ? $this->forPage($page, $perPage)->get($columns)
+            : $this->model->newCollection();
+
+        return $this->paginator($results, $total, $perPage, $page, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $pageName,
+        ]);
+    }
 
 
     public function scopeMyPlan(Builder $query)
@@ -87,13 +110,25 @@ class Plan extends Model
         return $total;
     }
 
+    public function getMoneyAttribute()
+    {
+        return $this->total;
+    }
+
     public function getStartFlagAttribute()
     {
         if ($this->releseFlag) {
             return (($this->total / $this->goal) >= 0.1);
         } else {
-            return ;//
+            return true;
         }
+    }
+
+    public function getEndFlagAttribute()
+    {
+        $now = \Carbon\Carbon::now()->format("Y-m-d");
+
+        return $now >= $this->due_date; //今日の日付が募集期限より後の日付ならtrue 募集を終了
     }
 
     public function user()
