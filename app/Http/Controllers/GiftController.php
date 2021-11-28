@@ -46,7 +46,7 @@ class GiftController extends Controller
 
         $file = $request->file('file');
         // dd($request->file('file'), $request, $files);
-
+        // dd(now() . ":" . $file->getClientOriginalName());
         DB::beginTransaction();
 
         try {
@@ -72,7 +72,7 @@ class GiftController extends Controller
             }
 
             $photo = new Photo([
-                'name' => $file->getClientOriginalName(),
+                'name' => now() . ":" . $file->getClientOriginalName(),
                 'path' => basename($path),
             ]);
 
@@ -83,11 +83,9 @@ class GiftController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             if (isset($gift)) {
-                $paths = $gift->getImageUrls();
-                foreach ($paths as $path) {
-                    if (Storage::exists($path)) {
-                        Storage::delete($path);
-                    }
+                $path = $gift->image_path;
+                if (Storage::exists($path)) {
+                    Storage::delete($path);
                 }
             }
 

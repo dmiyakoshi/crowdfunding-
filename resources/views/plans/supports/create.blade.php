@@ -18,7 +18,8 @@
         </div>
         <form type="hidden" action="{{ route('supports.store', [$plan, $gift]) }}" method="post">
             @csrf
-            <input type="submit" value="決定">
+            <input type="submit" value="決定"
+                class="w-1/2 flex justify-center bg-gradient-to-r from-purple-500 to-blue-600 hover:bg-gradient-to-l hover:from-purple-700 hover:to-blue-800 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500">
         </form>
     </div>
 </x-app-layout>

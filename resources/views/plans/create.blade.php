@@ -23,11 +23,11 @@
             </div>
             <div class="mb-4">
                 <label class="block text-white mb-2" for="introduction">
-                    自己紹介と企画の紹介
+                    自己紹介とプロジェクトの紹介
                 </label>
                 <textarea name="introduction" rows="10"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="250文字以上??文字以下">{{ old('introduction') }}</textarea>
+                    required placeholder="自分の自己紹介とプロジェクトの説明を記入してください">{{ old('introduction') }}</textarea>
             </div>
             {{-- <div class="mb-4"> //複数画像は記事のどこに表示するか情報がないので後回し
                 <label class="block text-white mb-2" for="file">画像</label>
@@ -48,11 +48,11 @@
                 </label>
                 <input type="text" name="heading_do"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="??字以上？？字以下" value="{{ old('heading_do') }}">
+                    required placeholder="見出し" value="{{ old('heading_do') }}">
             </div>
             <textarea name="description_do" rows="10"
                 class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                required placeholder="詳細">{{ old('description_do') }}</textarea>
+                required placeholder="誰の何を解決したいのか、自身の実現したいことを記入してください">{{ old('description_do') }}</textarea>
             {{-- <div class="mb-4">
                 <label class="block text-white mb-2" for="file">画像</label>
                 <input type="file" name="file[]" id="file" class="" multiple>
@@ -72,11 +72,11 @@
                 </label>
                 <input type="text" name="heading_reason"
                     class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                    required placeholder="??字以上？？字以下" value="{{ old('heading_reason') }}">
+                    required placeholder="見出し" value="{{ old('heading_reason') }}">
             </div>
             <textarea name="description_reason" rows="10"
                 class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-blue-800 w-full py-2 px-3"
-                required placeholder="詳細">{{ old('description_reason') }}</textarea>
+                required placeholder="このプロジェクトをやろうと考えた理由を記入してください">{{ old('description_reason') }}</textarea>
             {{-- <div class="mb-4">
                 <label class="block text-white mb-2" for="file">画像</label>
                 <input type="file" name="file[]" id="file" class="" multiple>

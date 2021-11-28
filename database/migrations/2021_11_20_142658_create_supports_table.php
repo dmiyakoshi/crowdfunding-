@@ -30,7 +30,7 @@ class CreateSupportsTable extends Migration
                 ->cascadeOnDelete();
             $table->integer('money'); //支援した金額 or リターンの値段
             $table->timestamps();
-            $table->unique(['gift_id', 'fund_id']); //ひとまずはユニーク 出来れば一人で複数支援できるようにしたい
+            $table->unique(['plan_id', 'gift_id', 'fund_id']); //ひとまずはユニーク 出来れば一人で複数支援できるようにしたい
         });
     }
 

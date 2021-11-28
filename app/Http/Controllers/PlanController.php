@@ -98,6 +98,7 @@ class PlanController extends Controller
         // dd($request, $plan);
         DB::beginTransaction();
 
+
         try {
             $plan->save();
 
@@ -179,7 +180,7 @@ class PlanController extends Controller
         $plan->fill($request->all());
         // dd($plan);
 
-        if ($plan->relese_data >= $plan->due_data) {
+        if ($plan->relese_date >= $plan->due_date) {
             return back()->withErrors("募集終了日は募集開始日より後の日付にしてください");
         }
 

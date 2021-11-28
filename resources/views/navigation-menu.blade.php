@@ -9,7 +9,7 @@
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
-                <div class="pl-3">
+                <div class="space-x-8 sm:-my-px sm:ml-10 sm:flex pt-5 pr-3">
                     <a href="{{ route('plans.index') }}">プロジェクトを探す</a>
                 </div>
                 <!-- Navigation Links -->

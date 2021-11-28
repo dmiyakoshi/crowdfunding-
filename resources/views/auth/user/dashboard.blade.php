@@ -12,7 +12,7 @@
             </div>
         </div>
     </div> --}}
-    <div class="container mx-auto w-3/5 my-8 px-4 py-4">
+    <div class="container mx-auto my-8 px-4 py-4">
         <div>
             @foreach ($plans as $plan)
                 <div class="bg-white w-full px-10 py-8 hover:shadow-2xl transition duration-500">

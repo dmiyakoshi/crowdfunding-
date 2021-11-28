@@ -9,6 +9,9 @@
                 <div class="flex item-center">
                     <div class="border border-gray-900 px-2 h-7 leading-7 rounded-full">{{ $plan->method->name }}</div>
                 </div>
+                <div class="flex item-center">
+                    <div class="border border-gray-900 px-2 h-7 leading-7 rounded-full">{{ $plan->status }}</div>
+                </div>
                 <div>
                     <span>作成日 {{ $plan->created_at->format('Y-m-d') }}</span>
                 </div>
@@ -45,8 +48,7 @@
                 <p class="text-gray-700 text-base">{!! nl2br(e($plan->introduction)) !!}</p>
             </div>
             <div>
-                <hr class="grid grid-cols-1 divide-y divide-blue-700 my-6">
-                <p class="text-gray-700 text-xl">{!! nl2br(e($plan->heading_do)) !!}</p>
+                <p class="text-gray-700 text-xl mt-8">{!! nl2br(e($plan->heading_do)) !!}</p>
                 <hr class="grid grid-cols-1 divide-y divide-blue-300">
                 @isset($plan->imageUrls[1])
                     <img src="{{ $plan->imageUrls[1] }}" alt="image" class="object-contain">
@@ -54,8 +56,7 @@
                 <p class="text-gray-700 text-base">{!! nl2br(e($plan->description_do)) !!}</p>
             </div>
             <div>
-                <hr class="grid grid-cols-1 divide-y divide-blue-700 my-6">
-                <p class="text-gray-700 text-xl">{!! nl2br(e($plan->heading_reason)) !!}</p>
+                <p class="text-gray-700 text-xl mt-8">{!! nl2br(e($plan->heading_reason)) !!}</p>
                 <hr class="grid grid-cols-1 divide-y divide-blue-300">
                 @isset($plan->imageUrls[2])
                     <img src="{{ $plan->imageUrls[2] }}" alt="image" class="object-contain">
@@ -63,8 +64,7 @@
                 <p class="text-gray-700 text-base">{!! nl2br(e($plan->description_reason)) !!}</p>
             </div>
             <div>
-                <hr class="grid grid-cols-1 divide-y divide-blue-700 my-6">
-                <p class="text-gray-700 text-xl">お金の使い方</p>
+                <p class="text-gray-700 text-xl mt-8">お金の使い方</p>
                 <hr class="grid grid-cols-1 divide-y divide-blue-300">
                 @isset($plan->imageUrls[3])
                     <img src="{{ $plan->imageUrls[3] }}" alt="image" class="object-contain">
@@ -120,7 +120,7 @@
                     <p class="block mt-1 text-lg leading-tight font-semibold text-gray-900 hover:underline">
                         {{ $gift->name }}
                         @if ($gift->limited_befor == 1)
-                            募集開始前限定
+                            事前登録限定
                         @endif
                     </p>
                     <p class="mt-2 text-gray-600">{{ $gift->description }}</p>
@@ -154,7 +154,13 @@
                         @else
                             @if (Auth::guard(\App\Consts\fundConst::GUARD)->check())
                                 <a href="{{ route('supports.create', [$plan, $gift]) }}"
-                                    class="bottom-0 right-0 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 hover:bg-gradient-to-l hover:from-blue-500 hover:to-indigo-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 sm:w-32 sm:mr-2 mb-2 sm:mb-0">支援する</a>
+                                    class="w-full flex justify-center bg-gradient-to-r from-purple-500 to-blue-600 hover:bg-gradient-to-l hover:from-purple-700 hover:to-blue-800 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500">
+                                    @if ($plan->releseFlag)
+                                        購入する
+                                    @else
+                                        事前登録
+                                    @endif
+                                </a>
                             @endif
                         @endif
                     @endif
@@ -185,7 +191,7 @@
                         @csrf
                         @method('DELETE')
                         <input type="submit" value="削除" onclick="if(!confirm('購入を取りやめますか？')){return false};"
-                            class="bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
+                            class="mr-5 bg-gradient-to-r from-pink-500 to-purple-600 hover:bg-gradient-to-l hover:from-purple-500 hover:to-pink-600 text-gray-100 p-2 rounded-full tracking-wide font-semibold shadow-lg cursor-pointer transition ease-in duration-500 w-full sm:w-32">
                     </form>
                 </div>
             @endforeach

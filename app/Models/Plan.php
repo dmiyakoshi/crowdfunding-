@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Consts\FundConst;
 use App\Consts\UserConst;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -118,7 +119,7 @@ class Plan extends Model
     public function getStartFlagAttribute()
     {
         if ($this->releseFlag) {
-            return (($this->total / $this->goal) >= 0.1);
+            return (($this->total / $this->goal) >= 0.1) || ($this->supports->count() > 10);
         } else {
             return true;
         }
@@ -129,6 +130,25 @@ class Plan extends Model
         $now = \Carbon\Carbon::now()->format("Y-m-d");
 
         return $now > $this->due_date; //今日の日付が募集期限より後の日付ならtrue 募集を終了
+    }
+
+    public function getStatusAttribute()
+    {
+        $status = "";
+
+        if ($this->endFlag) {
+            $status = "募集終了";
+        } elseif ($this->public == 0) {
+            $status = "公開前";
+        } else if (!$this->releseFlag) {
+            $status = "募集開始前";
+        } elseif ($this->startFlag) {
+            $status = "募集中";
+        } else {
+            $status = "失敗:募集開始日までに条件をクリアできませんでした";
+        }
+
+        return $status;
     }
 
     public function user()

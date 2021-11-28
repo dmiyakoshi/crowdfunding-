@@ -60,7 +60,7 @@ class SupportController extends Controller
     public function destroy(Plan $plan, Support $support)
     {
         try {
-            if (($plan->total - $support->money) > 0.1 || ($plan->total - $support->money) > $plan->goal) {
+            if (($plan->total - $support->money) > 0.1 || ($plan->total - $support->money) > $plan->goal || (($this->supports->count() -1) > 10)) {
                 $support->delete();
             } else {
                 throw new Exception("現在支援情報は削除できません");
